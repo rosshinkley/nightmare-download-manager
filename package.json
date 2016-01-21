@@ -1,0 +1,37 @@
+{
+  "name": "nightmare-download-manager",
+  "version": "0.1.0",
+  "license": "MIT",
+  "main": "./nightmare-download-manager.js",
+  "scripts": {
+    "test": "mocha test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rosshinkley/nightmare-download-manager.git"
+  },
+  "author": "Ross Hinkley",
+  "keywords": [
+    "nightmare",
+    "phantomjs",
+    "download",
+    "downloads"
+  ],
+  "dependencies": {
+    "debug": "^2.2.0",
+    "nightmare": "^2.1.0",
+    "sliced": "^1.0.1"
+  },
+  "devDependencies": {
+    "rimraf": "^2.4.3",
+    "mkdirp": "^0.5.1",
+    "basic-auth": "^1.0.3",
+    "basic-auth-connect": "^1.0.0",
+    "chai": "^3.4.1",
+    "express": "^4.13.3",
+    "mocha-generators": "^1.2.0",
+    "mocha": "^2.3.0",
+    "multer": "1.1.0",
+    "serve-static": "^1.10.0"
+  }
+}
