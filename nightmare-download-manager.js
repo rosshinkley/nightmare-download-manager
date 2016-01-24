@@ -112,24 +112,44 @@ Nightmare.action('waitDownloadsComplete', function(done) {
   };
 
   var _waitMsPassed = 0,
-    _timeoutMs = 250;
+    _timeoutMs = 250,
+    _elapsed = 0;
 
-  (function waitDownloads(self, done) {
+
+  var waitDownloads = function waitDownloads(self, done) {
+    if (dldone()) {
+      return done();
+      _waitMsPassed = 0;
+    } else if (self.options.downloadTimeout && _waitMsPassed > self.options.downloadTimeout) {
+      _waitMsPassed = 0;
+      return done(new Error('.wait() for download timed out after ' + self.options.downloadTimeout + 'msec'));
+    } else {
+      _waitMsPassed += _timeoutMs;
+      setTimeout(function() {
+        waitDownloads(self, done);
+      }, _timeoutMs);
+    }
+  };
+
+  var waitResponse = function() {
     setTimeout(function() {
-      if (dldone()) {
-        return done();
-        _waitMsPassed = 0;
-      } else if (self.options.downloadTimeout && _waitMsPassed > self.options.downloadTimeout) {
-        _waitMsPassed = 0;
-        return done(new Error('.wait() for download timed out after ' + self.options.downloadTimeout + 'msec'));
-      } else {
-        _waitMsPassed += _timeoutMs;
-        setTimeout(function() {
-          waitDownloads(self, done);
-        }, _timeoutMs);
+      if (Object.keys(self._downloads || {})
+        .length > 0) {
+        waitDownloads(self, done);
+      } else if (_elapsed < self.options.downloadResponseWait || 3000) {
+        _elapsed += 100;
+        waitResponse();
+      } else if (_elapsed >= self.options.downloadResponseWait || 3000) {
+        return done(new Error('.wait() for download never received a download after ' + (self.options.downloadResponseWait || 3000)));
       }
-    }, self.options.downloadResponseWait || 3000)
-  })(self, done);
+    }, 100);
+  };
+
+  if (!self.options.ignoreDownloads) {
+    waitResponse();
+  }else{
+    done();
+  }
 });
 
 Nightmare.prototype.emit = function() {
