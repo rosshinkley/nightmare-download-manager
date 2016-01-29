@@ -19,7 +19,7 @@
   ],
   "dependencies": {
     "debug": "^2.2.0",
-    "nightmare": "^2.1.0",
+    "nightmare": "git://github.com/rosshinkley/nightmare#electron-plugin",
     "sliced": "^1.0.1"
   },
   "devDependencies": {
