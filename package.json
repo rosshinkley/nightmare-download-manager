@@ -20,7 +20,8 @@
   "dependencies": {
     "debug": "^2.2.0",
     "nightmare": "^2.1.0",
-    "sliced": "^1.0.1"
+    "sliced": "^1.0.1",
+    "app": "^0.1.0"
   },
   "devDependencies": {
     "rimraf": "^2.4.3",
