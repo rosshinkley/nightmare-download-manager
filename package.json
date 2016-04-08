@@ -1,8 +1,9 @@
 {
   "name": "nightmare-download-manager",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "license": "MIT",
   "main": "./nightmare-download-manager.js",
+  "description":"Add download management to NightmareJS",
   "scripts": {
     "test": "mocha test"
   },
