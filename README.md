@@ -7,10 +7,11 @@ Add download management to your [Nightmare](http://github.com/segmentio/nightmar
 If you want to have downloads be managed serially, check out the [Nightmare inline download plugin](https://github.com/rosshinkley/nightmare-inline-download).
 
 ## Usage
-Require the library: 
+Require the library and pass the Nightmare library as a reference to attach the plugin actions:
 
 ```js
-require('nightmare-download-manager')
+var Nightmare = require('Nightmare');
+require('nightmare-download-manager')(Nightmare);
 ```
 ... and then enable the download manager with `.downloadManager()`.  It should be the first call in your Nightmare chain.
 
@@ -43,7 +44,8 @@ Sets the Electron path for where downloads are saved.
 ## Example
 
 ```javascript
-require('nightmare-download-manager');
+var Nightmare = require('nightmare');
+require('nightmare-download-manager')(Nightmare);
 var nightmare = Nightmare();
 nightmare.on('download', function(state, downloadItem){
   if(state == 'started'){
@@ -51,9 +53,12 @@ nightmare.on('download', function(state, downloadItem){
   }
 });
 
-yield nightmare
+nightmare
   .downloadManager()
   .goto('https://github.com/segmentio/nightmare')
   .click('a[href="/segmentio/nightmare/archive/master.zip"]')
-  .wait('downloads-complete');
+  .wait('downloads-complete')
+  .then(() => {
+    console.log('done');
+  })
 ```
