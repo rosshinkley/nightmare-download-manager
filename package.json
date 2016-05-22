@@ -18,9 +18,11 @@
     "download",
     "downloads"
   ],
+  "peerDependencies":{
+    "nightmare": "^2.3.0"
+  },
   "dependencies": {
     "debug": "^2.2.0",
-    "nightmare": "^2.3.0",
     "sliced": "^1.0.1"
   },
   "devDependencies": {

@@ -35,7 +35,7 @@ var base = 'http://localhost:7500/';
 
 describe('Nightmare download manager', function() {
   before(function(done) {
-    require('../nightmare-download-manager');
+    require('../nightmare-download-manager')(Nightmare);
     server.listen(7500, done);
   });
 
