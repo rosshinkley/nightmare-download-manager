@@ -57,7 +57,7 @@ nightmare
   .downloadManager()
   .goto('https://github.com/segmentio/nightmare')
   .click('a[href="/segmentio/nightmare/archive/master.zip"]')
-  .wait('downloads-complete')
+  .waitDownloadsComplete()
   .then(() => {
     console.log('done');
   })
