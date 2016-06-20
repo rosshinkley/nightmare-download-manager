@@ -33,7 +33,7 @@ Allows for downloads to be saved to a custom location, cancelled, or any other c
 Defines whether or not all downloads should be ignored.  By default, all downloads are accepted.
 
 ### downloadTimeout
-This will throw an exception if the `.waitForDownloads()` didn't finish within the set timeframe.  By default, this is not set, meaning there is no timeout.
+This will throw an exception if the `.waitDownloadsComplete()` didn't finish within the set timeframe.  By default, this is not set, meaning there is no timeout.
 
 ### downloadResponseWait
 Defines the length of time to wait for a download response.  Defaults to 3s.
