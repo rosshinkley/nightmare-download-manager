@@ -19,7 +19,7 @@
     "downloads"
   ],
   "peerDependencies":{
-    "nightmare": "^2.3.0"
+    "nightmare": "^2.5.2"
   },
   "dependencies": {
     "debug": "^2.2.0",
