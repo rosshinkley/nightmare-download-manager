@@ -9,7 +9,7 @@ module.exports = exports = function(Nightmare) {
         .join,
         sliced = require('sliced');
 
-      var app = require('app');
+      var app = require('electron').app;
 
       win.webContents.session.on('will-download',
         function(event, downloadItem, webContents) {
