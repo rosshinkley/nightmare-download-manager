@@ -21,11 +21,11 @@ Sets up the download management event handling.
 ### .waitDownloadsComplete()
 Waits until all files currently downloading are in a state of `'completed'`, `'interrupted'`, or `'cancelled'`.
 
-### .on('download', function(state, download) 
-This event is triggered when Electron emits `'will-download'`.  This event is also emitted after downloads are started when [`DownloadItem`](https://github.com/atom/electron/blob/master/docs/api/download-item.md) emits `'updated'` or `'done'`.   The possible values for `event` are `'started'`, `'cancelled'`, `'interrupted'`, or `'completed'`.  Note that by listening to `'download'`, Nightmare expects the default download behavior to be overridden. 
+### .on('download', function(state, downloadItem) 
+This event is triggered when Electron emits `'will-download'`.  This event is also emitted after downloads are started when [`DownloadItem`](https://github.com/atom/electron/blob/master/docs/api/download-item.md) emits `'updated'` or `'done'`.   The possible values for `state` are `'started'`, `'cancelled'`, `'interrupted'`, or `'completed'`.  Note that by listening to `'download'`, Nightmare expects the default download behavior to be overridden. 
 
-### .emit('download', [path|action,] download)
-Allows for downloads to be saved to a custom location, cancelled, or any other custom behavior.  The possible values for `action` are `'cancel'`, `'continue'` for default behavior, or a file path (file name and extension inclusive) to save the download to an alternative location. The `downloadItem` parameter should use the item passed by `'download'`.
+### .emit('download', [path|action,] downloadItem)
+Allows for downloads to be saved to a custom location, cancelled, or any other custom behavior.  The possible values for `action` are `'cancel'`, `'continue'` for default behavior, or a file path (file name and extension inclusive) to save the download to an alternative location. The `downloadItem` parameter should use the `downloadItem` passed by `'download'`.
 
 ## Additional Nightmare Options
 
