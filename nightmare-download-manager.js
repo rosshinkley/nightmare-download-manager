@@ -122,7 +122,6 @@ module.exports = exports = function(Nightmare) {
         var waitDownloads = function waitDownloads(self, done) {
             if (dldone()) {
                 return done();
-                _waitMsPassed = 0;
             } else if (self.options.downloadTimeout && _waitMsPassed > self.options.downloadTimeout) {
                 _waitMsPassed = 0;
                 return done(new Error('.wait() for download timed out after ' + self.options.downloadTimeout + 'msec'));
