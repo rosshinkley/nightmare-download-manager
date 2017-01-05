@@ -1,18 +1,18 @@
 var sliced = require('sliced'),
   debug = require('debug')('nightmare:download-manager');
 
-module.exports = exports = function(Nightmare) {
+module.exports = exports = function (Nightmare) {
   Nightmare.action('downloadManager',
-    function(ns, options, parent, win, renderer, done) {
-      var fs = require('fs'),
-        join = require('path')
+    function (ns, options, parent, win, renderer, done) {
+      var fs = require('fs-extra')
+      join = require('path')
         .join,
         sliced = require('sliced');
 
       var app = require('electron').app;
 
       win.webContents.session.on('will-download',
-        function(event, downloadItem, webContents) {
+        function (event, downloadItem, webContents) {
           parent.emit('log', 'will-download');
           if (options.ignoreDownloads) {
             downloadItem.cancel();
@@ -29,23 +29,26 @@ module.exports = exports = function(Nightmare) {
             path: join(app.getPath('downloads'), downloadItem.getFilename())
           };
 
-          downloadItem.on('done', function(e, state) {
+          downloadItem.on('done', function (e, state) {
             if (state == 'completed') {
-              fs.renameSync(join(app.getPath('downloads'), downloadItem.getFilename()), downloadInfo.path);
+              fs.move(join(app.getPath('downloads'), downloadItem.getFilename()), downloadInfo.path, function (err) {
+                parent.emit('download', state, downloadInfo);
+              })
+            } else {
+              parent.emit('download', state, downloadInfo);
             }
-            parent.emit('download', state, downloadInfo);
           });
 
-          downloadItem.on('updated', function(event) {
+          downloadItem.on('updated', function (event) {
             downloadInfo.receivedBytes = event.sender.getReceivedBytes();
             parent.emit('download', 'updated', downloadInfo);
           });
 
           downloadItem.setSavePath(downloadInfo.path);
 
-          var handler = function() {
+          var handler = function () {
             var arguments = sliced(arguments)
-              .filter(function(arg) {
+              .filter(function (arg) {
                 return !!arg;
               });
             var item, path;
@@ -63,7 +66,7 @@ module.exports = exports = function(Nightmare) {
               } else {
                 if (path && path !== 'continue') {
                   //.setSavePath() does not overwrite the first .setSavePath() call
-                  //use `fs.rename` when download is completed
+                  //use `fs.move` when download is completed
                   downloadInfo.path = path;
                 }
                 downloadItem.resume();
@@ -77,11 +80,11 @@ module.exports = exports = function(Nightmare) {
         });
       done();
     },
-    function(done) {
+    function (done) {
       debug('downloadManager', 'setting up downloads hash');
       var self = this;
       self._downloads = self._downloads || {};
-      self.child.on('download', function(state, downloadInfo) {
+      self.child.on('download', function (state, downloadInfo) {
         debug('download', downloadInfo.filename + ' is ' + state + ': ' + ((downloadInfo.receivedBytes / downloadInfo.totalBytes) * 100)
           .toFixed(2) + '%');
         self._downloads[downloadInfo.filename] = downloadInfo;
@@ -99,14 +102,14 @@ module.exports = exports = function(Nightmare) {
       return this;
     });
 
-  Nightmare.action('waitDownloadsComplete', function(done) {
+  Nightmare.action('waitDownloadsComplete', function (done) {
     debug('waitDownloadsComplete', 'waiting for downloads to finish');
 
     var self = this;
-    var dldone = function() {
+    var dldone = function () {
       return Object.keys(self._downloads)
         .map(key => self._downloads[key])
-        .filter(function(item) {
+        .filter(function (item) {
           return item.state != 'completed' && item.state != 'interrupted' && item.state != 'cancelled';
         }) == 0;
     };
@@ -119,20 +122,19 @@ module.exports = exports = function(Nightmare) {
     var waitDownloads = function waitDownloads(self, done) {
       if (dldone()) {
         return done();
-        _waitMsPassed = 0;
       } else if (self.options.downloadTimeout && _waitMsPassed > self.options.downloadTimeout) {
         _waitMsPassed = 0;
         return done(new Error('.wait() for download timed out after ' + self.options.downloadTimeout + 'msec'));
       } else {
         _waitMsPassed += _timeoutMs;
-        setTimeout(function() {
+        setTimeout(function () {
           waitDownloads(self, done);
         }, _timeoutMs);
       }
     };
 
-    var waitResponse = function() {
-      setTimeout(function() {
+    var waitResponse = function () {
+      setTimeout(function () {
         if (Object.keys(self._downloads || {})
           .length > 0) {
           waitDownloads(self, done);
@@ -152,7 +154,7 @@ module.exports = exports = function(Nightmare) {
     }
   });
 
-  Nightmare.prototype.emit = function() {
+  Nightmare.prototype.emit = function () {
     this.child.emit.apply(this, sliced(arguments));
     return this;
   };
