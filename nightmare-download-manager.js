@@ -69,7 +69,12 @@ module.exports = exports = function (Nightmare) {
                   //use `fs.move` when download is completed
                   downloadInfo.path = path;
                 }
-                downloadItem.resume();
+
+                if (item && item.receivedBytes / item.totalBytes == 1) {
+                  parent.emit('log', 'download appears to already be complete, skipping');
+                } else {
+                  downloadItem.resume();
+                }
               }
             }
           };
