@@ -1,3 +1,8 @@
+0.2.4 / 2017-02-11
+==================
+
+  * Fixes an issue where for extremely small files and fast connections, the download may complete before `downloadItem.pause()` can be called, which causes an event disposal exception when `downloadItem.resume()` is called
+
 0.2.3 / 2017-01-04
 ==================
   
