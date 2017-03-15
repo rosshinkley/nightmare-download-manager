@@ -19,11 +19,11 @@
     "downloads"
   ],
   "peerDependencies": {
+    "fs-extra": "^1.0.0",
     "nightmare": "^2.5.2"
   },
   "dependencies": {
     "debug": "^2.2.0",
-    "fs-extra": "^1.0.0",
     "sliced": "^1.0.1"
   },
   "devDependencies": {
