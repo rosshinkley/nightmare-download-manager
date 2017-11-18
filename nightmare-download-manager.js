@@ -70,8 +70,9 @@ module.exports = exports = function (Nightmare) {
                   downloadInfo.path = path;
                 }
 
-                if (item && item.receivedBytes / item.totalBytes == 1) {
+                if (item && downloadInfo.receivedBytes / item.totalBytes == 1) {
                   parent.emit('log', 'download appears to already be complete, skipping');
+                  fs.move(join(app.getPath('downloads'), downloadInfo.filename), downloadInfo.path, () =>{});
                 } else {
                   downloadItem.resume();
                 }
