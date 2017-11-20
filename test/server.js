@@ -18,8 +18,14 @@ app.get('/download/:size', function(req, res) {
     factor: 1024 * 1024,
     chunksize: Math.pow(2, 16)
   };
+  conversion.b = {
+    factor: 1,
+    chunksize: 1024
+  };
 
-  var parts = /^(\d+)([a-z]{2,3})\.(\w+)$/.exec(req.params.size);
+  console.log(req.params.size);
+  var parts = /^(\d+)([a-z]{1,3})\.(\w+)$/.exec(req.params.size);
+  console.dir(parts);
   var s = conversion[parts[2].toLowerCase()];
   var size = parseInt(parts[1], 10) * s.factor;
 
