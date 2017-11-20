@@ -72,7 +72,9 @@ module.exports = exports = function (Nightmare) {
 
                 if (item && downloadInfo.receivedBytes / item.totalBytes == 1) {
                   parent.emit('log', 'download appears to already be complete, skipping');
-                  fs.move(join(app.getPath('downloads'), downloadInfo.filename), downloadInfo.path, () =>{});
+                  fs.move(join(app.getPath('downloads'), downloadInfo.filename), downloadInfo.path, () =>{
+                    parent.emit('download', 'complete', downloadInfo);
+                  });
                 } else {
                   downloadItem.resume();
                 }
