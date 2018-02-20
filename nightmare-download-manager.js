@@ -127,7 +127,7 @@ module.exports = exports = function (Nightmare) {
     var waitDownloads = function waitDownloads(self, done) {
       if (dldone()) {
         return done();
-      } else if (self.options.downloadTimeout && _waitMsPassed > self.options.downloadTimeout) {
+      } else if (self.options.downloadTimeout && (_waitMsPassed > self.options.downloadTimeout)) {
         _waitMsPassed = 0;
         return done(new Error('.wait() for download timed out after ' + self.options.downloadTimeout + 'msec'));
       } else {
@@ -143,10 +143,10 @@ module.exports = exports = function (Nightmare) {
         if (Object.keys(self._downloads || {})
           .length > 0) {
           waitDownloads(self, done);
-        } else if (_elapsed < self.options.downloadResponseWait || 3000) {
+        } else if (_elapsed < (self.options.downloadResponseWait || 3000)) {
           _elapsed += 100;
           waitResponse();
-        } else if (_elapsed >= self.options.downloadResponseWait || 3000) {
+        } else if (_elapsed >= (self.options.downloadResponseWait || 3000)) {
           return done(new Error('.wait() for download never received a download after ' + (self.options.downloadResponseWait || 3000)));
         }
       }, 100);
