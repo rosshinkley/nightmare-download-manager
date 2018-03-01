@@ -5,7 +5,7 @@ var express = require('express'),
   mime = require('mime'),
   async = require('async');
 
-var app = module.exports = express();
+var app = (module.exports = express());
 
 app.get('/download/:size', function(req, res) {
 
@@ -23,9 +23,7 @@ app.get('/download/:size', function(req, res) {
     chunksize: 1024
   };
 
-  console.log(req.params.size);
   var parts = /^(\d+)([a-z]{1,3})\.(\w+)$/.exec(req.params.size);
-  console.dir(parts);
   var s = conversion[parts[2].toLowerCase()];
   var size = parseInt(parts[1], 10) * s.factor;
 

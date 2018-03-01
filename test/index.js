@@ -32,11 +32,15 @@ process.setMaxListeners(0);
  */
 
 var base = 'http://localhost:7500/';
-
+var serverInstance;
 describe('Nightmare download manager', function() {
   before(function(done) {
     require('../nightmare-download-manager')(Nightmare);
-    server.listen(7500, done);
+    serverInstance = server.listen(7500, done);
+  });
+  after(function(done){
+    serverInstance.close();
+    done();
   });
 
   it('should be constructable', function * () {
